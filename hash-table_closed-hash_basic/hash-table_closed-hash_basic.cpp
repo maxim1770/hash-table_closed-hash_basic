@@ -9,6 +9,7 @@ class AbstractKey
 public:
     virtual int getHashCode() = 0;
     virtual bool compare(AbstractKey* key) = 0;
+    virtual string get_name() = 0;
 };
 
 class Person : public AbstractKey
@@ -40,6 +41,10 @@ public:
     {
         Person* otherPerson = (Person*)key;
         return this->name == otherPerson->name;
+    }
+
+    string get_name() {
+        return this->name;
     }
 };
 
@@ -176,6 +181,15 @@ public:
 
         return -1;
     }
+
+    void print() {
+        cout << "-------------------" << endl;
+        for (int i = 0; i < this->hash_table_size; i++) {
+            if (this->hash_table[i] != nullptr)
+                cout << ElementStatus(this->hash_table[i]->status) << " " << this->hash_table[i]->key->get_name() << " " << this->hash_table[i]->data << endl;
+        }
+        cout << "-------------------" << endl;
+    }
 };
 
 int main()
@@ -184,9 +198,12 @@ int main()
 
     AbstractKey* key1 = new Person("Ivan");
     AbstractKey* key2 = new Person("Petya");
+    AbstractKey* key3 = new Person("Anna");
 
     hash_table.insert(key1, 23);
     hash_table.insert(key2, 48);
+    hash_table.insert(key3, 47);
+
 
     cout << hash_table.find(key1) << endl;
     cout << hash_table.find(key2) << endl;
@@ -194,6 +211,9 @@ int main()
     hash_table.remove(key2);
 
     cout << hash_table.find(key2) << endl;
+
+
+    hash_table.print();
 
 
     return 0;
